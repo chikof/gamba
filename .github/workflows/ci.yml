@@ -52,7 +52,7 @@ jobs:
     env:
       RUSTFLAGS: "-D warnings"
       RUSTDOCFLAGS: "-D warnings"
-      DATABASE_URL: postgres://postgres:password@localhost:5432/postgres
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
 
     services:
       postgres:
