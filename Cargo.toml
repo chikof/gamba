@@ -1,0 +1,112 @@
+[package]
+name = "gamba"
+authors = ["Chiko chiko@envs.net"]
+version = "0.0.0"
+edition = "2021"
+build = "build.rs"
+
+[workspace]
+members = ["crates/*"]
+
+[workspace.lints.rust]
+future_incompatible = "warn"
+nonstandard_style = "warn"
+rust_2018_idioms = "warn"
+rust_2018_compatibility = "warn"
+rust_2021_compatibility = "warn"
+unused = "warn"
+
+[workspace.lints.rustdoc]
+unescaped_backticks = "warn"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+todo = "warn"
+
+[lints]
+workspace = true
+
+[dependencies]
+# Environment
+dotenvy = "0.15.7"
+crates_io_env_vars = { git = "https://github.com/rust-lang/crates.io.git", branch = "main" }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+json-subscriber = "=0.2.4"
+
+# Errors
+anyhow = "1.0"
+thiserror = "2.0"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+
+# Async
+futures = "0.3"
+tokio = { version = "1.21", features = ["full"] }
+arc-swap = "1.7.1"
+
+# Web
+hyper = "1.2.0"
+axum = { version = "0.7.4", features = ["macros", "matched-path"] }
+axum-extra = { version = "=0.9.6", features = [
+  "cookie-signed",
+  "erased-json",
+  "typed-header",
+] }
+tower = { version = "0.5", features = ["limit"] }
+tower-http = { version = "=0.6.2", features = [
+  "add-extension",
+  "fs",
+  "catch-panic",
+  "timeout",
+  "compression-full",
+] }
+jsonwebtoken = "9.2.0"
+url = "2.3"
+reqwest = { version = "0.12", features = [
+  "json",
+  "rustls-tls",
+], default-features = false }
+http = "1.1.0"
+ipnetwork = "=0.20.0"
+oauth2 = "=4.4.2"
+parking_lot = "=0.12.3"
+
+# Cryptography
+sha2 = "0.10"
+hmac = "0.12"
+hex = "0.4"
+secrecy = "0.10.3"
+
+# Database
+sqlx = { version = "0.8.1", features = [
+  "runtime-tokio",
+  "tls-rustls",
+  "postgres",
+  "chrono",
+  "bigdecimal",
+] }
+
+# Time
+chrono = "0.4"
+
+itertools = "0.13.0"
+
+[dev-dependencies]
+insta = "1.26"
+derive_builder = "0.20.0"
+wiremock = "0.6.0"
+base64 = "0.22.1"
+tracing-test = "0.2.4"
+regex = "1.10.4"
+parking_lot = "0.12.3"
+thread_local = "1.1.8"
+claims = "=0.8.0"
+
+[profile.release]
+debug = 1
