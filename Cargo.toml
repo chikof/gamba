@@ -38,7 +38,7 @@ json-subscriber = "=0.2.4"
 
 # Errors
 anyhow = "=1.0.94"
-thiserror = "=2.0.4"
+thiserror = "=2.0.5"
 
 # Serialization
 serde = { version = "=1.0.215", features = ["derive"] }
