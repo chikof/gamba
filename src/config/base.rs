@@ -20,4 +20,3 @@ impl Base {
         Ok(Self { env })
     }
 }
-
