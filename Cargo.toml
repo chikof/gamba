@@ -28,8 +28,8 @@ workspace = true
 
 [dependencies]
 # Environment
-dotenvy = "0.15.7"
-crates_io_env_vars = { git = "https://github.com/rust-lang/crates.io.git", branch = "main" }
+dotenvy = "=0.15.7"
+crates_io_env_vars = { git = "https://github.com/rust-lang/crates.io.git", rev = "5226c1277e457ce05db59b9a3395537a48dd0f2b" }
 
 # Logging
 tracing = "0.1"
@@ -37,7 +37,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 json-subscriber = "=0.2.4"
 
 # Errors
-anyhow = "1.0"
+anyhow = "=1.0.94"
 thiserror = "2.0"
 
 # Serialization
