@@ -72,7 +72,7 @@ reqwest = { version = "=0.12.9", features = [
   "json",
   "rustls-tls",
 ], default-features = false }
-http = "=1.1.0"
+http = "=1.2.0"
 ipnetwork = "=0.20.0"
 oauth2 = "=4.4.2"
 parking_lot = "=0.12.3"
