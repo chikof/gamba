@@ -14,7 +14,7 @@ pub fn process_xff_headers(headers: &HeaderMap) -> Option<IpAddr> {
     };
 
     let has_more_headers = xff_iter.next().is_some();
-    return if has_more_headers {
+    if has_more_headers {
         // This only happens for requests going directly to crates-io.herokuapp.com,
         // since AWS CloudFront automatically merges these headers into one.
         //
@@ -48,7 +48,7 @@ pub fn process_xff_headers(headers: &HeaderMap) -> Option<IpAddr> {
             .into_iter()
             .filter_map(|r| r.ok())
             .next_back()
-    };
+    }
 }
 
 /// Parses the content of an `X-Forwarded-For` header into a

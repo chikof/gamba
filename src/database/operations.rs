@@ -21,6 +21,7 @@ pub(crate) async fn create_user(
     Ok(())
 }
 
+#[allow(dead_code)]
 pub(crate) async fn get_user(
     executor: impl PgExecutor<'_>,
     id: &str,
