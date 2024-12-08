@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs:
       - changed-files
-      - postgres
+      - sqlx-cli
     if: needs.changed-files.outputs.rust == 'true'
 
     env:
