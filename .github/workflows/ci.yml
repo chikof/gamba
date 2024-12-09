@@ -1,10 +1,7 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
-
+  merge_group:
   pull_request:
 
 concurrency:
@@ -81,10 +78,20 @@ jobs:
       - name: Wait for PostgreSQL
         run: until pg_isready -h 127.0.0.1 -p 5432 -U postgres; do sleep 1; done
 
-      - run: cargo fmt --check --all
-      - run: sqlx db setup
-      - run: cargo clippy --all-targets --all-features --workspace
-      - run: cargo doc --no-deps --document-private-items
+      - name: Run SQLx migrations
+        run: cargo sqlx database create && sqlx migrate run
+
+      - name: Check .sqlx files
+        run: cargo sqlx prepare --check -- --tests
+
+      - name: Build
+        run: cargo build --workspace --all-targets
+
+      - name: Lint code
+        run: cargo clippy --all-targets --all-features --workspace
+
+      - name: Check formatting
+        run: cargo fmt --check --all
 
   cargo-deny:
     name: cargo-deny
