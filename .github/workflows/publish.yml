@@ -49,4 +49,6 @@ jobs:
           push: true
           context: .
           file: Dockerfile
-          tags: ghcr.io/chikof/gamba:latest
+          tags: |
+            chikof/gamba:latest
+            ghcr.io/chikof/gamba:latest
