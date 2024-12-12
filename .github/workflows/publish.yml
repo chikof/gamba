@@ -44,9 +44,9 @@ jobs:
           tag: slim
 
       - name: Build and push Gamba Docker image
-        uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94 # tag=v3.1.1
+        uses: docker/build-push-action@v6
         with:
           push: true
           context: .
           file: Dockerfile
-          tags: ghcr.io/${{ github.GITHUB_REPOSITORY_OWNER }}/gamba:latest
+          tags: ghcr.io/chikof/gamba:latest
