@@ -30,14 +30,14 @@ jobs:
           tags: gamba:latest
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Slim the image
-        uses: kitabisa/docker-slim-action@v1
+        uses: kitabisa/docker-slim-action@0c1be445bffc5eafacb546d9b64bd3fe4de31312 # v1
         env:
           DSLIM_HTTP_PROBE: false
         with:
@@ -45,7 +45,7 @@ jobs:
           tag: slim
 
       - name: Build and push Gamba Docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 # v6
         with:
           push: true
           context: .
