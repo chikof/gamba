@@ -217,4 +217,3 @@ fn server_error_response(error: String) -> axum::response::Response {
     )
         .into_response()
 }
-
