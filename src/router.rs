@@ -7,9 +7,10 @@ use axum::Router;
 use http::{Method, StatusCode};
 
 pub fn build_axum_router(state: AppState) -> Router<()> {
-    let router = Router::new().route("/", get(site_metadata::metadata));
-    // user routes
-    // .route("/user/:user_id", get(handler));
+    let router = Router::new()
+        .route("/", get(site_metadata::metadata))
+        // user routes
+        .route("/me", get(user::me::me));
 
     router
         .fallback(|method: Method| async move {

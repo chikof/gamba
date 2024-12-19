@@ -5,6 +5,7 @@ use crate::Env;
 use anyhow::anyhow;
 use anyhow::Context;
 use axum::http::HeaderValue;
+use crates_io_env_vars::required_var;
 use crates_io_env_vars::{list, list_parsed, var, var_parsed};
 use ipnetwork::IpNetwork;
 use std::collections::HashSet;
@@ -17,6 +18,7 @@ pub struct Server {
     pub ip: IpAddr,
     pub port: u16,
     pub max_blocking_threads: Option<usize>,
+    pub session_key: cookie::Key,
     pub allowed_origins: AllowedOrigins,
     pub discord: DiscordConfig,
     pub blocked_ips: HashSet<IpAddr>,
@@ -59,6 +61,7 @@ impl Server {
             ip,
             port,
             max_blocking_threads,
+            session_key: cookie::Key::derive_from(required_var("SESSION_KEY")?.as_bytes()),
             max_allowed_page_offset: var_parsed("WEB_MAX_ALLOWED_PAGE_OFFSET")?.unwrap_or(200),
             page_offset_ua_blocklist,
             page_offset_cidr_blocklist,
@@ -109,10 +112,6 @@ pub struct AllowedOrigins(Vec<String>);
 impl AllowedOrigins {
     pub fn from_default_env() -> anyhow::Result<Self> {
         let allowed_origins = var("WEB_ALLOWED_ORIGINS")?.unwrap_or("*".to_string());
-        if allowed_origins == "*" {
-            return Ok(Self::default());
-        }
-
         let allowed_origins = allowed_origins
             .split(',')
             .map(ToString::to_string)
@@ -122,6 +121,12 @@ impl AllowedOrigins {
     }
 
     pub fn contains(&self, value: &HeaderValue) -> bool {
-        self.0.iter().any(|it| it == value)
+        self.0.iter().any(|it| {
+            if it == "*" {
+                return true;
+            }
+
+            it == value
+        })
     }
 }

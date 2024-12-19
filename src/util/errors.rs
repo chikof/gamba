@@ -1,5 +1,4 @@
 use axum::response::IntoResponse;
-use oauth2::ErrorResponse;
 use std::any::{Any, TypeId};
 use std::borrow::Cow;
 use std::error::Error;
@@ -9,7 +8,6 @@ mod json;
 
 use axum::Extension;
 use reqwest::StatusCode;
-use tokio::task::JoinError;
 use tracing::error;
 
 use crate::middleware::log_request::ErrorField;
@@ -100,15 +98,9 @@ impl<E: Error + Send + 'static> AppError for E {
     }
 }
 
-impl From<url::ParseError> for BoxedAppError {
-    fn from(err: url::ParseError) -> BoxedAppError {
-        Box::new(err)
-    }
-}
-
 impl<E, T> From<oauth2::RequestTokenError<E, T>> for BoxedAppError
 where
-    T: ErrorResponse + 'static,
+    T: oauth2::ErrorResponse + 'static,
     E: Error + Send + 'static,
 {
     fn from(err: oauth2::RequestTokenError<E, T>) -> BoxedAppError {
@@ -127,8 +119,14 @@ where
     }
 }
 
-impl From<reqwest::Error> for BoxedAppError {
-    fn from(err: reqwest::Error) -> BoxedAppError {
+impl From<::url::ParseError> for BoxedAppError {
+    fn from(err: ::url::ParseError) -> BoxedAppError {
+        Box::new(err)
+    }
+}
+
+impl From<sqlx::Error> for BoxedAppError {
+    fn from(err: sqlx::Error) -> BoxedAppError {
         Box::new(err)
     }
 }
@@ -139,15 +137,44 @@ impl From<serde_json::Error> for BoxedAppError {
     }
 }
 
+impl From<reqwest::Error> for BoxedAppError {
+    fn from(err: reqwest::Error) -> BoxedAppError {
+        Box::new(err)
+    }
+}
+
 impl From<std::io::Error> for BoxedAppError {
     fn from(err: std::io::Error) -> BoxedAppError {
         Box::new(err)
     }
 }
 
-impl From<JoinError> for BoxedAppError {
-    fn from(err: JoinError) -> BoxedAppError {
-        Box::new(err)
+// Conversion from anyhow::Error to BoxedAppError
+impl From<anyhow::Error> for BoxedAppError {
+    fn from(err: anyhow::Error) -> BoxedAppError {
+        Box::new(AnyhowWrapper(err))
+    }
+}
+
+// Wrapper for anyhow::Error
+struct AnyhowWrapper(anyhow::Error);
+
+impl fmt::Debug for AnyhowWrapper {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::Debug::fmt(&self.0, f)
+    }
+}
+
+impl fmt::Display for AnyhowWrapper {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::Display::fmt(&self.0, f)
+    }
+}
+
+impl AppError for AnyhowWrapper {
+    fn response(&self) -> axum::response::Response {
+        error!(error = %self.0, "Internal Server Error");
+        server_error_response(self.0.to_string())
     }
 }
 
