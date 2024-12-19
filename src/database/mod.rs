@@ -1,6 +1,7 @@
 //! Provides access to the database.
 use chrono::{NaiveDate, NaiveDateTime};
 pub use client::PgDbClient;
+use serde::{Deserialize, Serialize};
 use sqlx::types::BigDecimal;
 use std::fmt::{Display, Formatter};
 
@@ -33,13 +34,14 @@ impl Display for RunId {
 }
 
 /// Represents a user.
-#[derive(Debug, sqlx::Type)]
+#[derive(Debug, sqlx::Type, Deserialize, Serialize)]
 #[sqlx(type_name = "users")]
 pub struct UserModel {
     pub id: String,
     pub username: String,
     pub avatar: Option<String>,
     pub created_at: NaiveDateTime,
+    pub access_token: Option<String>,
 }
 
 #[derive(Debug, sqlx::Type)]

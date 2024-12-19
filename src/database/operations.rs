@@ -8,12 +8,13 @@ pub(crate) async fn create_user(
     // language=PostgreSQL
     sqlx::query!(
         r#"
-        INSERT INTO users (id, username, avatar)
-        VALUES ($1, $2, $3)
+        INSERT INTO users (id, username, avatar, access_token)
+        VALUES ($1, $2, $3, $4)
         "#,
         data.id,
         data.username,
-        data.avatar
+        data.avatar,
+        data.access_token
     )
     .execute(executor)
     .await?;
@@ -43,6 +44,7 @@ pub(crate) async fn get_user(
         username: row.username,
         avatar: row.avatar,
         created_at: row.created_at,
+        access_token: None,
     }))
 }
 

@@ -1,7 +1,7 @@
-use super::operations::{create_bet, create_user};
+use super::operations::{create_bet, create_user, get_user};
 use crate::database::{BetModel, UserModel};
+use anyhow::Context;
 use sqlx::PgPool;
-// use super::RunId;
 
 /// Provides access to a database using sqlx operations.
 #[derive(Clone)]
@@ -16,6 +16,14 @@ impl PgDbClient {
 
     pub async fn create_user(&self, user: UserModel) -> anyhow::Result<()> {
         create_user(&self.pool, &user).await
+    }
+
+    pub async fn get_user(&self, user_id: &str) -> anyhow::Result<UserModel> {
+        let user = get_user(&self.pool, user_id)
+            .await?
+            .context("User not found")?;
+
+        Ok(user)
     }
 
     pub async fn create_bet(&self, profit: BetModel) -> anyhow::Result<()> {

@@ -2,18 +2,12 @@ use crate::real_ip::process_xff_headers;
 use axum::extract::{ConnectInfo, Request};
 use axum::middleware::Next;
 use axum::response::IntoResponse;
+use derive_more::Deref;
 use std::net::{IpAddr, SocketAddr};
 use tracing::debug;
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Deref)]
 pub struct RealIp(IpAddr);
-
-impl std::ops::Deref for RealIp {
-    type Target = IpAddr;
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
 
 pub async fn middleware(
     ConnectInfo(socket_addr): ConnectInfo<SocketAddr>,

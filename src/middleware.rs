@@ -1,12 +1,10 @@
-use crate::app::AppState;
-use crate::Env;
-
 pub mod app;
 mod common_headers;
 mod debug;
 pub mod log_request;
 pub mod normalize_path;
 pub mod real_ip;
+pub mod session;
 
 // use ::sentry::integrations::tower as sentry_tower;
 use axum::middleware::{from_fn, from_fn_with_state};
@@ -20,18 +18,23 @@ use tower_http::catch_panic::CatchPanicLayer;
 use tower_http::compression::{CompressionLayer, CompressionLevel};
 use tower_http::timeout::{RequestBodyTimeoutLayer, TimeoutLayer};
 
+use crate::app::AppState;
+use crate::Env;
+
 pub fn apply_axum_middleware(state: AppState, router: Router<()>) -> Router {
     let config = &state.config;
     let env = config.env();
 
     let middleware_1 = tower::ServiceBuilder::new()
+        .layer(from_fn(self::real_ip::middleware))
         .layer(CatchPanicLayer::new())
+        .layer(from_fn(log_request::log_requests))
         .layer(conditional_layer(env == Env::Development, || {
             from_fn(debug::debug_requests)
         }));
 
     let middleware_2 = tower::ServiceBuilder::new()
-        // .layer(from_fn_with_state(state.clone(), session::attach_session));
+        .layer(from_fn_with_state(state.clone(), session::attach_session))
         .layer(from_fn_with_state(
             state.clone(),
             common_headers::add_common_headers,

@@ -12,11 +12,11 @@ use axum::response::IntoResponse;
 use axum::Extension;
 use axum_extra::headers::UserAgent;
 use axum_extra::TypedHeader;
+use derive_more::Deref;
 use parking_lot::Mutex;
 use std::borrow::Cow;
 use std::collections::HashMap;
 use std::fmt::Display;
-use std::ops::Deref;
 use std::sync::Arc;
 use std::time::Instant;
 use tracing::{event, Level};
@@ -93,15 +93,8 @@ pub async fn log_requests(
     response
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, Deref)]
 pub struct RequestLog(Arc<Mutex<Vec<(&'static str, String)>>>);
-
-impl Deref for RequestLog {
-    type Target = Arc<Mutex<Vec<(&'static str, String)>>>;
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
 
 impl RequestLog {
     pub fn add<V: Display>(&self, key: &'static str, value: V) {

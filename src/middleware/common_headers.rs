@@ -3,14 +3,9 @@ use axum::extract::Request;
 use axum::middleware::Next;
 use axum::response::IntoResponse;
 use http::{header, HeaderMap, HeaderValue};
-// use axum_extra::headers::{CacheControl, Expires, HeaderMapExt};
-// use std::time::{Duration, SystemTime};
 
 // see http://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header
 const NGINX_SUCCESS_CODES: [u16; 10] = [200, 201, 204, 206, 301, 203, 303, 304, 307, 308];
-
-// const ONE_DAY: Duration = Duration::from_secs(24 * 60 * 60);
-// const ONE_YEAR: Duration = Duration::from_secs(365 * 24 * 60 * 60);
 
 pub async fn add_common_headers(
     _state: AppState,
@@ -35,12 +30,3 @@ pub async fn add_common_headers(
 
     (headers, response)
 }
-
-// fn expires(headers: &mut HeaderMap, cache_duration: Duration) {
-//     headers.typed_insert(Expires::from(SystemTime::now() + cache_duration));
-//     headers.typed_insert(
-//         CacheControl::new()
-//             .with_public()
-//             .with_max_age(cache_duration),
-//     );
-// }

@@ -2,13 +2,13 @@ use app::{App, AppState};
 use router::build_axum_router;
 use std::sync::Arc;
 
-// #[allow(async_fn_in_trait)]
 // #[macro_use]
 // extern crate serde;
 #[macro_use]
 extern crate tracing;
 
 pub mod app;
+pub mod auth;
 pub mod config;
 pub mod controllers;
 pub mod database;
