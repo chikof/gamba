@@ -2,8 +2,8 @@ use app::{App, AppState};
 use router::build_axum_router;
 use std::sync::Arc;
 
-// #[macro_use]
-// extern crate serde;
+#[macro_use]
+extern crate serde;
 #[macro_use]
 extern crate tracing;
 
