@@ -1,0 +1,10 @@
+-- Add down migration script here
+ALTER TABLE bets
+ADD CONSTRAINT bets_user_id_fkey FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE;
+ALTER TABLE bets DROP COLUMN created_at;
+
+ALTER TABLE bets
+ADD COLUMN user_id VARCHAR(19) REFERENCES users (id) NOT NULL,
+ADD COLUMN date DATE DEFAULT CURRENT_DATE NOT NULL;
+
+DROP TABLE IF EXISTS user_bets;

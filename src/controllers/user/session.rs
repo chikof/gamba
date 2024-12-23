@@ -7,11 +7,12 @@ use axum::extract::{FromRequestParts, Query};
 use axum::http::request::Parts;
 use axum::Json;
 use oauth2::basic::BasicClient;
-use oauth2::reqwest::http_client;
+use oauth2::reqwest::async_http_client;
 use oauth2::PkceCodeVerifier;
-use oauth2::{AuthUrl, ClientId, ClientSecret, RedirectUrl, TokenUrl};
-use oauth2::{AuthorizationCode, CsrfToken, PkceCodeChallenge, Scope, TokenResponse};
-use serde::Deserialize;
+use oauth2::{
+    AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken, PkceCodeChallenge, RedirectUrl,
+    Scope, TokenResponse, TokenUrl,
+};
 use serde_json::{json, Value};
 use std::sync::Arc;
 
@@ -26,7 +27,7 @@ pub struct AuthorizeQuery {
 }
 
 //  Checkout available fields on: https://discord.com/developers/docs/resources/user
-#[derive(Default, serde::Serialize, Deserialize)]
+#[derive(Default, Serialize, Deserialize)]
 struct DiscordUser {
     id: String,
     username: String,
@@ -107,15 +108,18 @@ pub async fn authorize(
     let token_response = client
         .exchange_code(code)
         .set_pkce_verifier(pkce_code_verifier.unwrap())
-        .request(http_client)?;
+        .request_async(async_http_client)
+        .await?;
 
     let access_token = token_response.access_token().secret();
     let discord_user = app
         .http
         .get("https://discord.com/api/users/@me")
         .bearer_auth(access_token)
-        .send()?
+        .send()
+        .await?
         .json::<DiscordUser>()
+        .await
         .map_err(|err| {
             request_log.add("cause", err);
             server_error("Error obtaining token")

@@ -1,0 +1,23 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO bets (id, bookmaker_id, amount)\n        VALUES (id_generator(), $1, $2)\n        RETURNING id\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Numeric"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "fe433c666cf46410f210f68cb5877ec7378430455ae7f117a119e57ea65e2fd7"
+}

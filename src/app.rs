@@ -2,7 +2,7 @@ use crate::config;
 use crate::database::PgDbClient;
 use axum::extract::{FromRef, FromRequestParts, State};
 use derive_more::Deref;
-use reqwest::blocking::Client as ReqwestClient;
+use reqwest::Client as ReqwestClient;
 use std::sync::Arc;
 
 pub struct App {

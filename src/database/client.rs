@@ -1,7 +1,9 @@
-use super::operations::{create_bet, create_user, get_user};
-use crate::database::{BetModel, UserModel};
+use super::operations::{create_bet, create_user, get_bookmaker, get_user};
+use super::BookmakerModel;
+use crate::database::UserModel;
 use anyhow::Context;
-use sqlx::PgPool;
+use sqlx::{types::BigDecimal, PgPool};
+use std::str::FromStr;
 
 /// Provides access to a database using sqlx operations.
 #[derive(Clone)]
@@ -26,7 +28,22 @@ impl PgDbClient {
         Ok(user)
     }
 
-    pub async fn create_bet(&self, profit: BetModel) -> anyhow::Result<()> {
-        create_bet(&self.pool, &profit).await
+    pub async fn create_bet(
+        &self,
+        amount: &str,
+        bookmaker_id: &str,
+        user_id: &str,
+    ) -> anyhow::Result<String> {
+        create_bet(
+            &self.pool,
+            bookmaker_id,
+            BigDecimal::from_str(amount).context("Failed to parse amount")?,
+            user_id,
+        )
+        .await
+    }
+
+    pub async fn get_bookmaker(&self, bookmaker_id: &str) -> anyhow::Result<BookmakerModel> {
+        get_bookmaker(&self.pool, bookmaker_id).await
     }
 }
