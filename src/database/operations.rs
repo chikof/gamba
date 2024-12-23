@@ -1,5 +1,5 @@
-use super::UserModel;
-use sqlx::{types::BigDecimal, PgExecutor, PgPool, Transaction};
+use super::{BookmakerModel, BookmakerScope, UserModel};
+use sqlx::{types::BigDecimal, PgExecutor, PgPool};
 
 pub(crate) async fn create_user(
     executor: impl PgExecutor<'_>,
@@ -49,20 +49,20 @@ pub(crate) async fn get_user(
 
 pub(crate) async fn create_bet(
     pool: &PgPool,
-    casino: &str,
+    bookmaker_id: &str,
     amount: BigDecimal,
     user_id: &str,
 ) -> anyhow::Result<String> {
-    let mut tx: Transaction<'_, sqlx::Postgres> = pool.begin().await?;
+    let mut tx = pool.begin().await?;
 
     // language=PostgreSQL
     let bet_id = sqlx::query_scalar!(
         r#"
-        INSERT INTO bets (id, casino, amount)
+        INSERT INTO bets (id, bookmaker_id, amount)
         VALUES (id_generator(), $1, $2)
         RETURNING id
         "#,
-        casino,
+        bookmaker_id as _,
         amount,
     )
     .fetch_one(&mut *tx)
@@ -83,4 +83,29 @@ pub(crate) async fn create_bet(
     tx.commit().await?;
 
     Ok(bet_id)
+}
+
+pub(crate) async fn get_bookmaker(
+    executor: impl PgExecutor<'_>,
+    bookmaker_id: &str,
+) -> anyhow::Result<BookmakerModel> {
+    let row = sqlx::query_as!(
+        BookmakerModel,
+        r#"
+    SELECT
+        id,
+        label,
+        slug,
+        url,
+        scope as "scope: BookmakerScope",
+        created_at
+    FROM bookmakers
+    WHERE id = $1
+        "#,
+        bookmaker_id
+    )
+    .fetch_one(executor)
+    .await?;
+
+    Ok(row)
 }
