@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n    SELECT\n        b.id,\n        b.amount,\n        bm.label as bookmaker,\n        sum(b.amount) OVER (ORDER BY b.created_at) as monthly_profit,\n        sum(b.amount) OVER () as total_profit,\n        b.created_at\n    FROM bets b\n    JOIN user_bets ub ON b.id = ub.bet_id\n    JOIN bookmakers bm ON b.bookmaker_id = bm.id\n    WHERE ub.user_id = $1\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "amount",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 2,
+        "name": "bookmaker",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "monthly_profit",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 4,
+        "name": "total_profit",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 5,
+        "name": "created_at",
+        "type_info": "Timestamp"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      null,
+      null,
+      false
+    ]
+  },
+  "hash": "80332058d5539b972568d259f84bee587a505115b63c88ba07eb6ab398c833d7"
+}
