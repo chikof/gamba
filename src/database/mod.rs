@@ -54,3 +54,13 @@ pub struct BetModel {
     pub amount: BigDecimal,
     pub created_at: NaiveDateTime,
 }
+
+#[derive(Debug, sqlx::FromRow, Serialize)]
+pub struct BetListModel {
+    pub id: Snowflake,
+    pub amount: BigDecimal,
+    pub bookmaker: String,
+    pub monthly_profit: Option<BigDecimal>,
+    pub total_profit: Option<BigDecimal>,
+    pub created_at: NaiveDateTime,
+}

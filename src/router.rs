@@ -11,6 +11,7 @@ pub fn build_axum_router(state: AppState) -> Router<()> {
         .route("/", get(site_metadata::metadata))
         // user routes
         .route("/me", get(user::me::me))
+        .route("/me/bets", get(bet::list::list_bets))
         .route("/private/session/login", get(user::session::login))
         .route("/private/session/authorize", get(user::session::authorize))
         .route("/private/session", delete(user::session::logout))

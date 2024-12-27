@@ -1,4 +1,4 @@
-use super::{BookmakerModel, BookmakerScope, UserModel};
+use super::{BetListModel, BookmakerModel, BookmakerScope, UserModel};
 use sqlx::{types::BigDecimal, PgExecutor, PgPool};
 
 pub(crate) async fn create_user(
@@ -108,4 +108,31 @@ pub(crate) async fn get_bookmaker(
     .await?;
 
     Ok(row)
+}
+
+pub(crate) async fn get_bets(
+    executor: impl PgExecutor<'_>,
+    user_id: &str,
+) -> anyhow::Result<Vec<BetListModel>> {
+    let rows = sqlx::query_as!(
+        BetListModel,
+        r#"
+    SELECT
+        b.id,
+        b.amount,
+        bm.label as bookmaker,
+        sum(b.amount) OVER (ORDER BY b.created_at) as monthly_profit,
+        sum(b.amount) OVER () as total_profit,
+        b.created_at
+    FROM bets b
+    JOIN user_bets ub ON b.id = ub.bet_id
+    JOIN bookmakers bm ON b.bookmaker_id = bm.id
+    WHERE ub.user_id = $1
+        "#,
+        user_id
+    )
+    .fetch_all(executor)
+    .await?;
+
+    Ok(rows)
 }

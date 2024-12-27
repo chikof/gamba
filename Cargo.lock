@@ -333,6 +333,7 @@ dependencies = [
  "num-bigint",
  "num-integer",
  "num-traits",
+ "serde",
 ]
 
 [[package]]
@@ -958,6 +959,7 @@ dependencies = [
  "axum-extra",
  "axum-valid",
  "base64 0.22.1",
+ "bigdecimal",
  "chrono",
  "claims",
  "cookie",

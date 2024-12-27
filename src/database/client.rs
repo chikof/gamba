@@ -1,5 +1,5 @@
-use super::operations::{create_bet, create_user, get_bookmaker, get_user};
-use super::BookmakerModel;
+use super::operations::{create_bet, create_user, get_bets, get_bookmaker, get_user};
+use super::{BetListModel, BookmakerModel};
 use crate::database::UserModel;
 use anyhow::Context;
 use sqlx::{types::BigDecimal, PgPool};
@@ -45,5 +45,9 @@ impl PgDbClient {
 
     pub async fn get_bookmaker(&self, bookmaker_id: &str) -> anyhow::Result<BookmakerModel> {
         get_bookmaker(&self.pool, bookmaker_id).await
+    }
+
+    pub async fn get_bets(&self, user_id: &str) -> anyhow::Result<Vec<BetListModel>> {
+        get_bets(&self.pool, user_id).await
     }
 }
