@@ -5,6 +5,9 @@ version = "0.0.0"
 edition = "2021"
 build = "build.rs"
 
+[workspace]
+members = ["app"]
+
 [workspace.lints.rust]
 future_incompatible = "warn"
 nonstandard_style = "warn"
@@ -117,3 +120,13 @@ claims = "=0.8.0"
 
 [profile.release]
 debug = 1
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"
