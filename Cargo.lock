@@ -119,6 +119,7 @@ checksum = "c1fd03a028ef38ba2276dce7e33fcd6369c158a1bca17946c4b1b701891c1ff7"
 name = "app"
 version = "0.1.0"
 dependencies = [
+ "daisy_rsx",
  "dioxus",
 ]
 
@@ -144,6 +145,12 @@ dependencies = [
  "url",
  "zbus",
 ]
+
+[[package]]
+name = "askama_escape"
+version = "0.10.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "619743e34b5ba4e9703bba34deac3427c72507c7159f5fd030aea8cac0cfe341"
 
 [[package]]
 name = "assert-json-diff"
@@ -1090,6 +1097,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "daisy_rsx"
+version = "0.1.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3d9a14ad0b6971a4e6b5febf2930c60b84a7307af5ebeaf301ef7f449a83301a"
+dependencies = [
+ "dioxus",
+ "dioxus-ssr",
+]
+
+[[package]]
 name = "darling"
 version = "0.20.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1658,6 +1675,18 @@ dependencies = [
  "rustc-hash 1.1.0",
  "tracing",
  "warnings",
+]
+
+[[package]]
+name = "dioxus-ssr"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a55c587138f97b1406524e6c116e19e623fa7003f22e0d6afe0239c7ef61f119"
+dependencies = [
+ "askama_escape",
+ "dioxus-core",
+ "dioxus-core-types",
+ "rustc-hash 1.1.0",
 ]
 
 [[package]]

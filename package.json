@@ -1,0 +1,16 @@
+{
+  "name": "gamba",
+  "version": "1.0.0",
+  "description": "<div align=\"center\"> <picture>     <img alt=\"gamba image\" src=\"https://cdn.discordapp.com/emojis/985080686333554698.webp?size=1024&animated=true\" width=\"200\"> </picture> </div>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
+    "daisyui": "^4.12.23"
+  }
+}

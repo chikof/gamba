@@ -1,12 +1,19 @@
 [application]
 
 # App (Project) Name
-name = "gamba"
+name = "Gamba"
+
+# Dioxus App Default Platform
+# desktop, web, mobile, ssr
+default_platform = "web"
+
+# `build` & `serve` dist path
+out_dir = "dist"
 
 [web.app]
 
 # HTML title tag content
-title = "Gamba"
+title = "Gamba | ⛺"
 
 # include `assets` in web platform
 [web.resource]
@@ -16,6 +23,11 @@ style = []
 
 # Additional JavaScript files
 script = []
+
+[web.watcher]
+reload_html = true
+
+watch_path = ["src", "assets", "public"]
 
 [web.resource.dev]
 
