@@ -58,7 +58,7 @@ derive_more = { version = "=1.0.0", features = [
   "deref_mut",
   "display",
 ] }
-axum-extra = { version = "=0.9.6", features = [
+axum-extra = { version = "=0.10.0", features = [
   "cookie-signed",
   "erased-json",
   "typed-header",
