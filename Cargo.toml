@@ -51,7 +51,7 @@ arc-swap = "=1.7.1"
 
 # Web
 hyper = "=1.5.2"
-axum = { version = "=0.7.9", features = ["macros", "matched-path"] }
+axum = { version = "=0.8.1", features = ["macros", "matched-path"] }
 cookie = { version = "=0.18.1", features = ["secure"] }
 derive_more = { version = "=1.0.0", features = [
   "deref",
